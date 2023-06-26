@@ -3,6 +3,7 @@ const express = require('express')
 
 const authRouter = require('./routes/auth.route');
 const alumnoRouter = require('./routes/alumno.route')
+const profesorRouter = require('./routes/profesor.route')
 
 const cookieParser = require('cookie-parser');
 
@@ -15,6 +16,7 @@ app.use(cookieParser())
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/alumno', alumnoRouter)
+app.use('/api/v1/profesor', profesorRouter)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`))
