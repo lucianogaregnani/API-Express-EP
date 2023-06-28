@@ -1,7 +1,5 @@
 const db = require('../models/index')
 const user = db.sequelize.models.User
-const nota = db.sequelize.models.Nota
-
 
 const findAlumnosQuery = (profesorId) => {
     return {

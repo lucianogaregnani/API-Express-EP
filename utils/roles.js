@@ -1,8 +1,8 @@
 const roles = [
     'alumno',
     'profesor',
-    'directorcarrera',
-    'directorinstituto'
+    'admincarrera',
+    'admininstituto'
 ]
 
 module.exports = roles
