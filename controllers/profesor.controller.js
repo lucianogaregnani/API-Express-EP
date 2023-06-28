@@ -1,24 +1,31 @@
+const { findAlumnosQuery } = require('../helpers/findAlumnosQuery')
 const db = require('../models/index')
-const user = db.sequelize.models.User
 const materia = db.sequelize.models.Materia
-const nota = db.sequelize.models.Nota
 
 const findAlumnos = async (req, res) => {
-    const materias = await materia.findOne({
-        where: {
-            profesorId: req.uid
-        },
-        attributes: [],
-        include: [{
-            model: user,
-            attributes: ['email'],
-            through: {
-                model: nota,
-                attributes: ['primerParcial', 'segundoParcial'],
-            }
-        }]
-    })
-    res.json(materias)
+    try {
+        const alumnos = await materia.findOne(findAlumnosQuery(req.uid))
+
+        res.json(alumnos.Users)
+    } catch (error) {
+        res.status(400).json({error: error})
+    }
 }
 
-module.exports = findAlumnos
+const findAlumno = async (req, res) => {
+
+    try {
+        const alumnosQueryAux = findAlumnosQuery(req.uid)
+
+        alumnosQueryAux.include.where = { 
+            alumnoId: req.params.id 
+        }
+
+        const alumnos = await materia.findOne(alumnosQueryAux)
+        res.json(alumnos.Users[0])
+    } catch (error) {
+        res.status(400).json({error: error})
+    }
+}
+
+module.exports = {findAlumnos, findAlumno}
