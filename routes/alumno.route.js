@@ -9,6 +9,6 @@ router.get('/materia/:id', requireToken, requireRol('Alumno'), findMateria)
 
 router.post('/inscripcion/:id', requireToken, requireRol('Alumno'), inscribirseAMateria)
 
-router.post('/baja/:id', requireToken, requireRol('Alumno'), darseDeBaja)
+router.delete('/baja/:id', requireToken, requireRol('Alumno'), darseDeBaja)
 
 module.exports = router

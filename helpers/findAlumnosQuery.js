@@ -2,6 +2,7 @@ const db = require('../models/index')
 const user = db.sequelize.models.User
 const nota = db.sequelize.models.Nota
 
+
 const findAlumnosQuery = (profesorId) => {
     return {
             where: {
@@ -14,10 +15,19 @@ const findAlumnosQuery = (profesorId) => {
                 through: {
                     as:'nota',
                     model: nota,
-                    attributes: ['alumnoId', 'primerParcial', 'segundoParcial']
+                    attributes: ['primerParcial', 'segundoParcial']
                 }
             }]
     }
 }
 
-module.exports = {findAlumnosQuery}
+const findAlumnoQuery = (profesorId, alumnoId) => {
+    const alumnosQueryAux = findAlumnosQuery(profesorId)
+
+    alumnosQueryAux.include.where = { 
+        alumnoId: alumnoId
+    }
+    return alumnosQueryAux
+}
+
+module.exports = {findAlumnosQuery, findAlumnoQuery}
