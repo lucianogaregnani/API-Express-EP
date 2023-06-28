@@ -1,7 +1,6 @@
 const { findMateriasAdminQuery } = require('../helpers/findMateriaQuery')
 const db = require('../models/index')
 const materia = db.sequelize.models.Materia
-const user = db.sequelize.models.User
 
 const findMateriasAdmin = async (req, res) => {
     try {
@@ -39,6 +38,24 @@ const asignarMateria = async (req, res) => {
     }
 }
 
+const desasignarMateria = async (req, res) => {
+    try {
+        await materia.update({
+                profesorId: null
+            },
+            {
+                where: {
+                    id: req.params.id
+                }
+            }
+        )
+        
+        res.json({ok:true})
+    } catch (error) {
+        res.status(400).json({error:error.message})
+    }
+}
+
 const insertarMateria = async (req, res) => {
     try {
         const {nombre, profesorId, carreraId} = req.body
@@ -55,4 +72,18 @@ const insertarMateria = async (req, res) => {
     }
 }
 
-module.exports = {findMateriasAdmin, findMateriaAdmin, asignarMateria, insertarMateria}
+const eliminarMateria = async (req, res) => {
+    try {
+        await materia.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+
+        res.json({ok:true})
+    } catch (error) {
+        res.status(400).json({error:error.message})
+    }
+}
+
+module.exports = {findMateriasAdmin, findMateriaAdmin, asignarMateria, desasignarMateria, insertarMateria, eliminarMateria}

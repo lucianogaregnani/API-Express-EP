@@ -1,7 +1,7 @@
 const express = require('express')
 const { requireToken, requireRol } = require('../middlewares/requireToken')
 const router = express.Router()
-const { findMateriasAdmin, findMateriaAdmin, asignarMateria, insertarMateria } = require('../controllers/adminCarrera.controller')
+const { findMateriasAdmin, findMateriaAdmin, asignarMateria, insertarMateria, desasignarMateria } = require('../controllers/adminCarrera.controller')
 
 router.get('/materias', requireToken, requireRol('adminCarrera'), findMateriasAdmin)
 
@@ -9,6 +9,11 @@ router.get('/materia/:id', requireToken, requireRol('adminCarrera'), findMateria
 
 router.patch('/asignarmateria/:materiaId/:profesorId', requireToken, requireRol('adminCarrera'), asignarMateria)
 
+router.patch('/desasignarmateria/:id', requireToken, requireRol('adminCarrera'), desasignarMateria)
+
 router.post('/insertarmateria', requireToken, requireRol('adminCarrera'), insertarMateria)
+
+router.delete('/eliminarmateria/:id', requireToken, requireRol('adminCarrera'), desasignarMateria)
+
 
 module.exports = router
