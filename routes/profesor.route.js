@@ -9,5 +9,4 @@ router.get('/alumno/:id', requireToken ,requireRol('Profesor'), findAlumno)
 
 router.patch('/notasdeparcial/:id', requireToken, requireRol('Profesor'), actualizarNotas)
 
-
 module.exports = router

@@ -6,7 +6,7 @@ const user = db.sequelize.models.User
 
 const login = async (req, res) => {
     try {
-        let userLogin = await user.findOne({
+        const userLogin = await user.findOne({
             where: {
                 email: req.body.email
             }
@@ -17,14 +17,14 @@ const login = async (req, res) => {
         const isValidPassword = userLogin.comparePassword(req.body.password)
         if(!isValidPassword) return res.status(400).json({error: 'La contraseña es incorrecta'})
 
-        const {token, expiresIn} = generateToken(userLogin.id, userLogin.rol)
+        const {token, expiresIn} = generateToken(userLogin.id)
 
         generateRefreshToken(userLogin.id, res)
         
         return res.json({token, expiresIn})
     }
     catch(err) {
-        res.status(400).json({error: err.name})
+        res.status(400).json({error: err.message})
     }
 }
 

@@ -14,7 +14,6 @@ const findAlumnosQuery = (profesorId) => {
                 attributes: ['id', 'email', 'nombre'],
                 through: {
                     as:'nota',
-                    model: nota,
                     attributes: ['primerParcial', 'segundoParcial']
                 }
             }]
@@ -24,8 +23,8 @@ const findAlumnosQuery = (profesorId) => {
 const findAlumnoQuery = (profesorId, alumnoId) => {
     const alumnosQueryAux = findAlumnosQuery(profesorId)
 
-    alumnosQueryAux.include.where = { 
-        alumnoId: alumnoId
+    alumnosQueryAux.include[0].where = { 
+        id: alumnoId
     }
     return alumnosQueryAux
 }
