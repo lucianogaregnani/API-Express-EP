@@ -1,5 +1,6 @@
 const {body} = require('express-validator')
 const validateErrors = require('../middlewares/validateErrors')
+const { requireToken, requireRol } = require('./requireToken')
 
 const validateEmail = () => body('email', 'no es un email válido').trim().isEmail()
 
@@ -10,6 +11,11 @@ const validateRepassword = () => body('password', 'No coinciden las contraseñas
                                         return value
                                     } 
                                 })
+
+const validateAccess = (rol) => [
+    requireToken,
+    requireRol(rol)
+] 
 
 // Validar roles
 const validateRegister = [
@@ -26,4 +32,4 @@ const validateLogin = [
     validateErrors
 ]
 
-module.exports = {validateRegister, validateLogin}
+module.exports = {validateRegister, validateLogin, validateAccess}

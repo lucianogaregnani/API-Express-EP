@@ -1,12 +1,13 @@
 const express = require('express')
-const { requireToken, requireRol } = require('../middlewares/requireToken')
 const {findAlumnos, findAlumno, actualizarNotas} = require('../controllers/profesor.controller')
+const { validateAccess } = require('../middlewares/validateUser')
+const { validateFindAlumno } = require('../middlewares/validateProfesor')
 const router = express.Router()
 
-router.get('/alumnos', requireToken, requireRol('Profesor'), findAlumnos)
+router.get('/alumnos', validateAccess('Profesor'), findAlumnos)
 
-router.get('/alumno/:id', requireToken ,requireRol('Profesor'), findAlumno)
+router.get('/alumno/:id', validateFindAlumno, findAlumno)
 
-router.patch('/notasdeparcial/:id', requireToken, requireRol('Profesor'), actualizarNotas)
+router.patch('/notasdeparcial/:id', validateFindAlumno, actualizarNotas)
 
 module.exports = router

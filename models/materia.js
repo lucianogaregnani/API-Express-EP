@@ -24,7 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Materia.init({
-    nombre: DataTypes.STRING
+    nombre: {
+      type: DataTypes.STRING,
+      unique: true
+    }
   }, {
     sequelize,
     modelName: 'Materia',

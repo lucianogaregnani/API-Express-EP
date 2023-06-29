@@ -1,3 +1,5 @@
+const { Op } = require('sequelize')
+const { updateAdminQuery } = require('../helpers/adminQuery')
 const { findCarrerasAdminQuery } = require('../helpers/findCarrerasQuery')
 const db = require('../models/index')
 const carrera = db.sequelize.models.Carrera 
@@ -13,6 +15,7 @@ const findCarreras = async (req, res) => {
 
 const findCarreraAdmin = async (req, res) => {
     try {
+
         const carreraAux = await carrera.findByPk(req.params.id, findCarrerasAdminQuery())
         res.status(500).json(carreraAux)
     } catch (error) {
@@ -22,10 +25,11 @@ const findCarreraAdmin = async (req, res) => {
 
 const insertarCarrera = async (req, res) => {
     try {
-        const {nombre, directorId} = req.body
+        const {nombre, institutoId, adminId} = req.body
         await carrera.create({
             nombre,
-            directorId
+            institutoId,
+            adminId
         })
         res.status(500).json({ok:true})
     } catch (error) {
@@ -37,7 +41,10 @@ const eliminarCarrera = async (req, res) => {
     try {
         await carrera.destroy({
             where: {
-                id: req.params.id
+                [Op.and]: {
+                    id: req.params.id,
+                    adminId: req.uid
+                }
             }
         })
 
@@ -47,35 +54,23 @@ const eliminarCarrera = async (req, res) => {
     }
 }
 
-const asignarDirector = async (req, res) => {
+const asignarAdministrador = async (req, res) => {
     try {
-        await carrera.update({
-                directorId: req.params.directorId
-            },
-            {
-                where: {
-                    id: req.params.carreraId
-                }
-            }
-        )
-
+        const [atributos, condicion] = updateAdminQuery(req.params.adminId, req.params.carreraId)
+        
+        await carrera.update(atributos, condicion)
+        
         res.json({ok:true})
     } catch (error) {
         res.status(400).json({error:error.message})
     }
 }
 
-const desasignarDirector = async (req, res) => {
+const desasignarAdministrador = async (req, res) => {
     try {
-        await carrera.update({
-                directorId: null
-            },
-            {
-                where: {
-                    id: req.params.id
-                }
-            }
-        )
+        const [atributos, condicion] = updateAdminQuery(null, req.params.id)
+
+        await carrera.update(atributos, condicion)
         
         res.json({ok:true})
     } catch (error) {
@@ -84,5 +79,5 @@ const desasignarDirector = async (req, res) => {
 }
 
 
-
-module.exports = {findCarreras, insertarCarrera, findCarreraAdmin, eliminarCarrera, asignarDirector, desasignarDirector}
+module.exports = {findCarreras, insertarCarrera, findCarreraAdmin, eliminarCarrera,
+                asignarAdministrador, desasignarAdministrador}

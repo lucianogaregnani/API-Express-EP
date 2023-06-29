@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasOne(models.Carrera, {
         as:'carrera',
-        foreignKey:'directorId'
+        foreignKey:'adminId'
       })
 
       this.belongsToMany(models.Materia, {
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasOne(models.Instituto, {
         as:'instituto',
-        foreignKey:'directorId'
+        foreignKey:'adminId'
       })
 
     }

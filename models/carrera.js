@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       this.belongsTo(models.User, {
-        as:'director',
-        foreignKey:'directorId'
+        as:'administrador',
+        foreignKey:'adminId'
       })
 
       this.belongsTo(models.Instituto, {
@@ -24,7 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Carrera.init({
-    nombre: DataTypes.STRING
+    nombre: {
+      type: DataTypes.STRING,
+      unique: true
+    }
   }, {
     sequelize,
     modelName: 'Carrera',
