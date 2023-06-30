@@ -14,9 +14,9 @@ const findMateriasQuery = (alumnoId) => {
             attributes: ['id', 'nombre'],
             through: {
                 as:'nota',
-                attributes: ['primerParcial', 'segundoParcial']
-            }
-        }]
+                attributes: ['primerParcial', 'segundoParcial'],
+            },
+        }],
     }
 }
 
@@ -30,7 +30,28 @@ const findMateriaQuery = (alumnoId, materiaId) => {
     return queryAux
 }
 
-const findMateriasAdminQuery = () => {
+const findMateriasAdminQuery = (pagina, sizePagina) => {
+    const page = parseInt(pagina) || 0
+    const size = parseInt(sizePagina) || 10
+    return {
+        attributes:['id', 'nombre'],
+        include: [{
+                model: user,
+                as: 'profesor',
+                attributes: ['id', 'nombre']
+            },
+            {
+                model: carrera,
+                as: 'carrera',
+                attributes: ['id', 'nombre']
+            }
+        ],
+        limit: size,
+        offset: page
+    }
+}
+
+const findMateriaAdminQuery = () => {
     return {
         attributes:['id', 'nombre'],
         include: [{
@@ -47,4 +68,4 @@ const findMateriasAdminQuery = () => {
     }
 }
 
-module.exports = {findMateriaQuery, findMateriasQuery, findMateriasAdminQuery}
+module.exports = {findMateriaQuery, findMateriasQuery, findMateriasAdminQuery, findMateriaAdminQuery}

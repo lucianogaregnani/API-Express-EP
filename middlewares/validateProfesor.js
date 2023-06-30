@@ -1,7 +1,6 @@
 const validateErrors = require('../middlewares/validateErrors')
 const { validateAccess } = require('./validateUser')
 const { param } = require('express-validator')
-const { buscarUsuario } = require('./validateAdmin')
 const db = require('../models/index')
 const { Op } = require('sequelize')
 const nota = db.sequelize.models.Nota 
@@ -13,6 +12,10 @@ const buscarMateria = async (profesorId) => {
             profesorId: profesorId
         }
     })
+
+    if(!materiaAux) throw new Error('No sos profesor de esa materia')
+
+    return materiaAux
 }
 
 const buscarNota = async (alumnoId, materiaId) => {

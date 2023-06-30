@@ -3,8 +3,7 @@ const validateErrors = require('../middlewares/validateErrors')
 const { validateAccess } = require('./validateUser')
 const db = require('../models/index')
 const { Op } = require('sequelize')
-const instituto = db.sequelize.models.Instituto 
-const carrera = db.sequelize.models.Carrera 
+const instituto = db.sequelize.models.Instituto  
 const user = db.sequelize.models.User 
 
 const buscarUsuario = async (id, rol) => {
@@ -15,63 +14,52 @@ const buscarUsuario = async (id, rol) => {
             }
         }
     })
+
     return userAux
 }
 
 const validarNombre = () => body('nombre', 'El nombre debe tener al menos 5 letras').isLength({min:5})
 const validarAdminIdBody = (rol) => body('adminId', 'adminId no puede tener un valor vacio').notEmpty().custom(async value => {
     const admin = await buscarUsuario(value, rol)
-    if(!admin) throw new Error('No existe ningún admin de instituto con esa ID')
-})
-
-const validarExistenciaDeInstituto = () => param('id').notEmpty().custom(async value => {
-    const institutoAux = await instituto.findByPk(value)
-    if(!institutoAux) throw new Error('No existe ningún instituto con esa ID')
+    if(!admin) throw new Error('No existe ningún admin con esa ID')
 })
 
 const validarAdminIdParam = (atributo, rol) => param(atributo).notEmpty().custom(async value => {
-    const userAux = buscarUsuario(value, rol)
-    if(!userAux) throw new Error('No existe ningún admin de instituto con esa ID')
+    const userAux = await buscarUsuario(value, rol)
+    if(!userAux) throw new Error('No existe ningún admin con esa ID')
 })
 
-const validarCarrera = (atributo) => param(atributo).notEmpty().custom(async (value, {req}) => {
-    const carreraAux = await carrera.findOne({
+const validarInstituto = (atributo) => param(atributo).notEmpty().custom(async value => {
+    const institutoAux = await instituto.findOne({
         where: {
-            [Op.and]: {
-                id: value,
-                adminId: req.uid
-            }
+            id: value
         }
     })
-    if(!carreraAux) throw new Error('No existe ninguna carrera con esa ID')
+    if(!institutoAux) throw new Error('No existe ninguna instituto con esa ID')
 })
 
 const validarFindInstituto = [
     ...validateAccess('admin'),
-    param('id')
-        .custom(async value => {
-            const institutoAux = await instituto.findByPk(value)
-            if(!institutoAux) throw new Error('No existe ningún instituto con esa ID')
-        }),
+    validarInstituto('id'),
     validateErrors
 ]
 
 const validarEliminarInstituto = [
     ...validateAccess('admin'),
-    validarExistenciaDeInstituto(),
+    validarInstituto('id'),
     validateErrors    
 ]
 
 const validarAsignarAdmin = [
     ...validateAccess('admin'),
-    validarAdminIdParam('adminId', 'admin'),
-    validarCarrera('carreraId'),
+    validarAdminIdParam('adminId', 'adminInstituto'),
+    validarInstituto('institutoId'),
     validateErrors     
 ]
 
 const validarDesasignarAdmin = [
     ...validateAccess('admin'),
-    validarAdminIdParam('id', 'admin'),
+    validarInstituto('id'),
     validateErrors    
 ]
 

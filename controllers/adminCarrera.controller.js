@@ -1,11 +1,12 @@
-const { findMateriasAdminQuery } = require('../helpers/findMateriaQuery')
+const { findMateriasAdminQuery, findMateriaAdminQuery } = require('../helpers/findMateriaQuery')
 const db = require('../models/index')
 const materia = db.sequelize.models.Materia
 
 const findMateriasAdmin = async (req, res) => {
     try {
-        const materias = await materia.findAll(findMateriasAdminQuery())
-        res.status(500).json(materias)
+        const {page, size} = req.query
+        const materias = await materia.findAll(findMateriasAdminQuery(page, size))
+        res.json(materias)
     } catch (error) {
         res.status(400).json({error:error.message})
     }
@@ -13,8 +14,8 @@ const findMateriasAdmin = async (req, res) => {
 
 const findMateriaAdmin = async (req, res) => {
     try {
-        const materiaAux = await materia.findByPk(req.params.id, findMateriasAdminQuery())
-        res.status(500).json(materiaAux)
+        const materiaAux = await materia.findByPk(req.params.id, findMateriaAdminQuery())
+        res.json(materiaAux)
     } catch (error) {
         res.status(400).json({error:error.message})
     }

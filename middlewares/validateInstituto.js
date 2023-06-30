@@ -1,10 +1,11 @@
-const {param} = require('express-validator')
+const {param, body} = require('express-validator')
 const validateErrors = require('../middlewares/validateErrors')
 const { validateAccess } = require('./validateUser')
 const db = require('../models/index')
 const { Op } = require('sequelize')
 const { validarAdminIdBody, validarAdminIdParam, validarNombre } = require('./validateAdmin')
 const carrera = db.sequelize.models.Carrera 
+const instituto = db.sequelize.models.Instituto 
 
 const buscarCarrera = async (id, adminId) => {
     const carreraAux = await carrera.findOne({
@@ -14,19 +15,36 @@ const buscarCarrera = async (id, adminId) => {
             }
         }
     })
+
+    return carreraAux
 }
+
+const buscarInstituto = async (id) => {
+    const institutoAux = await instituto.findByPk(id)
+
+    return institutoAux
+}
+
+const validarExistenciaDeInstituto = () => body('institutoId')
+                                            .notEmpty()
+                                            .custom(async value => {
+                                                const institutoAux = await buscarInstituto(value)
+                                                console.log(institutoAux)
+                                                if(!institutoAux) throw new Error('No existe un instituto con ese ID')
+                                            })
 
 const validarInsertarCarrera = [
     ...validateAccess('adminInstituto'),
     validarNombre(),
+    validarExistenciaDeInstituto(),
     validarAdminIdBody('admincarrera'),
     validateErrors
 ]
 
 const validarExistenciaDeCarrera = (atributo) => param(atributo)
                                         .notEmpty()
-                                        .custom(async (value, {req}) => {
-                                            const carreraAux = await buscarCarrera(value, req.uid)
+                                        .custom(async value => {
+                                            const carreraAux = await buscarCarrera(value)
                                             if(!carreraAux) throw new Error('No existe ninguna carrera con esa ID')
                                         })
 

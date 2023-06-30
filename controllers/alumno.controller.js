@@ -25,11 +25,11 @@ const findMateria = async (req, res) => {
 const inscribirseAMateria = async (req, res) => {
     try {
         const notaAVer = await nota.create({
-            materiaId: parseInt(req.params.id),
+            materiaId: req.params.id,
             alumnoId: req.uid
         })
     
-        res.status(200).json({notaAVer})
+        res.status(200).json({ok:true})
     } catch (error) {
         res.status(400).json({error: error.message})
     }

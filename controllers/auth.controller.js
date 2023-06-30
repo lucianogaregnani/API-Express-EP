@@ -40,29 +40,13 @@ const register = async (req, res) => {
             email,
             password
         })
-        return res.json({ok: true})
+        res.json({ok: true})
     }
     catch(err) {
         if(err.name === "SequelizeUniqueConstraintError") {
             res.status(400).json({error: 'Ya existe ese email'})
         }
         res.status(400).json({error: err.message})
-    }
-}
-
-const infoUser = async (req, res) => {
-    try {
-        const userEmail = await user.findOne({
-            where: {
-                id: req.uid
-            }
-        }) 
-        return res.json({
-            id: userEmail.id,
-            email: userEmail.email
-        })
-    } catch (error) {
-        return res.status(500).json({error:'Error de servidor'})
     }
 }
 
@@ -73,7 +57,7 @@ const refreshToken = (req, res) => {
         return res.json({token, expiresIn})
 
     } catch (error) {
-        return res.status(500).json({error:'Error de servidor'})
+        return res.status(400).json({error:'Error de servidor'})
     }
 }
 
@@ -82,4 +66,4 @@ const logout = (req, res) => {
     res.json({ok:true})
 }
 
-module.exports = {login, register, infoUser, refreshToken, logout}
+module.exports = {login, register, refreshToken, logout}

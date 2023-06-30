@@ -21,11 +21,7 @@ const eliminarInstituto = async (req, res) => {
     try {
         await instituto.destroy({
             where: {
-                [Op.and]:{
-                    id: req.params.id,
-                    adminId: req.uid
-                }
-
+                id: req.params.id
             }
         })
 
@@ -37,14 +33,14 @@ const eliminarInstituto = async (req, res) => {
 
 const findInstitutos = async (req, res) => {
     try {
-        const institutos = await instituto.findAll(findInstitutosAdminQuery(req.uid))
+        const {page, size} = req.query
+        const institutos = await instituto.findAll(findInstitutosAdminQuery(page, size))
     
         res.json(institutos)
     } catch (error) {
         res.status(400).json({error:error.message})
     }
 }
-
 
 const findInstituto = async (req, res) => {
     try {
@@ -58,8 +54,9 @@ const findInstituto = async (req, res) => {
 
 const asignarAdmin = async (req, res) => {
     try {
-        const [atributos, condicion] = updateAdminQuery(req.params.adminId, req.params.carreraId)
+        const [atributos, condicion] = updateAdminQuery(req.params.adminId, req.params.institutoId)
 
+        console.log(atributos, condicion)
         await instituto.update(atributos, condicion)
 
         res.json({ok:true})
@@ -71,7 +68,7 @@ const asignarAdmin = async (req, res) => {
 const desasignarAdmin = async (req, res) => {
     try {
         const [atributos, condicion] = updateAdminQuery(null, req.params.id)
-
+        console.log(atributos, condicion)
         await instituto.update(atributos, condicion)
         
         res.json({ok:true})

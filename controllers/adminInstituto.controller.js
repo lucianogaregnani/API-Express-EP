@@ -25,11 +25,11 @@ const findCarreraAdmin = async (req, res) => {
 
 const insertarCarrera = async (req, res) => {
     try {
-        const {nombre, institutoId, adminId} = req.body
+        const {nombre, institutoId} = req.body
         await carrera.create({
             nombre,
             institutoId,
-            adminId
+            adminId: req.uid
         })
         res.status(500).json({ok:true})
     } catch (error) {
