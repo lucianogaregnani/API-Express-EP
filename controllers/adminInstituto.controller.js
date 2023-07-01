@@ -5,13 +5,11 @@ const db = require('../models/index')
 const carrera = db.sequelize.models.Carrera 
 const instituto = db.sequelize.models.Instituto 
 
-// TODO: findCarrerasAdminQuery tiene que cambiar para que cumpla la siguiente condición:
-// Tendria que buscar las carreras que tengan la id del insituto donde soy admin
-
 const findCarreras = async (req, res) => {
     try {
-        const carreras = await instituto.findOne(findCarrerasAdminQuery(req.uid)) 
-        res.status(500).json(carreras)
+        const {page, size} = req.query
+        const carreras = await instituto.findAll(findCarrerasAdminQuery(req.uid, page, size)) 
+        res.json(carreras)
     } catch (error) {
         res.status(400).json({error:error.message})
     }
@@ -20,7 +18,7 @@ const findCarreras = async (req, res) => {
 const findCarreraAdmin = async (req, res) => {
     try {
         const carreraAux = await instituto.findOne(findCarreraAdminQuery(req.uid, req.params.id))
-        res.status(500).json(carreraAux.carrera[0])
+        res.json(carreraAux.carrera[0])
     } catch (error) {
         res.status(400).json({error:error.message})
     }
@@ -42,7 +40,7 @@ const insertarCarrera = async (req, res) => {
             adminId,
             institutoId: institutoAux.id
         })
-        res.status(500).json({ok:true})
+        res.json({ok:true})
     } catch (error) {
         res.status(400).json({error:error.message})
     }

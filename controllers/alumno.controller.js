@@ -6,7 +6,8 @@ const nota = db.sequelize.models.Nota
 
 const findMaterias = async (req,res) => {
     try {
-        const materias = await user.findOne(findMateriasQuery(req.uid))
+        const {page, size} = req.query
+        const materias = await user.findOne(findMateriasQuery(req.uid, page, size))
         res.status(200).json(materias.Materia)
     } catch (error) {
         res.status(400).json({error: error.message})

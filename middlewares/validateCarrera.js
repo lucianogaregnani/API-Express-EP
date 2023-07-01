@@ -14,7 +14,6 @@ const buscarMateria = async (id, profesorId) => {
                 id,
                 profesorId
             }
-
         }
     })
 
@@ -76,7 +75,6 @@ const validarInsertarMateria = [
     ...validateAccess('adminCarrera'),
     validarNombre(),
     validarExistenciaDeProfesorBody('profesorId'),
-    validarExistenciaDeCarrera('carreraId'),
     validateErrors    
 ]
 

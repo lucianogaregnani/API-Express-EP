@@ -14,7 +14,6 @@ const buscarUsuario = async (id, rol) => {
             }
         }
     })
-
     return userAux
 }
 

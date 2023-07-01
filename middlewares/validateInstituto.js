@@ -12,25 +12,12 @@ const buscarCarrera = async (id, adminId) => {
     return carreraAux
 }
 
-const validarPermisoDesasignarCarrera = async ({req}) => {
-    const carrera = await buscarCarrera(req.params.id ,req.uid)
-
-    if(!carrera) throw new Error('No tenes permiso para desasignar esa carrera')
-}
-
-const validarInsertarCarrera = [
-    ...validateAccess('adminInstituto'),
-    validarNombre(),
-    validarAdminIdBody('admincarrera'),
-    validateErrors
-]
-
 const validarExistenciaDeCarrera = (atributo) => param(atributo)
-                                        .notEmpty()
-                                        .custom(async (value, {req}) => {
-                                            const carreraAux = await buscarCarrera(value, req.uid)
-                                            if(!carreraAux) throw new Error('No existe ninguna carrera con esa ID')
-                                        })
+                                            .notEmpty()
+                                            .custom(async (value, {req}) => {
+                                                const carreraAux = await buscarCarrera(value, req.uid)
+                                                if(!carreraAux) throw new Error('No existe ninguna carrera con esa ID')
+                                            })
 
 const validarEliminarCarrera = [
     ...validateAccess('adminInstituto'),
@@ -41,14 +28,20 @@ const validarEliminarCarrera = [
 const validarAsignarCarrera = [
     ...validateAccess('adminInstituto'),
     validarExistenciaDeCarrera('carreraId'),
-    validarAdminIdParam('adminId', 'adminInstituto'),
+    validarAdminIdParam('adminId', 'adminCarrera'),
     validateErrors
 ]
 
 const validarDesasignarCarrera = [
     ...validateAccess('adminInstituto'),
-    validarAdminIdParam('id', 'adminInstituto'),
+    validarExistenciaDeCarrera('id'),
     validateErrors    
 ]
 
+const validarInsertarCarrera = [
+    ...validateAccess('adminInstituto'),
+    validarNombre(),
+    validarAdminIdBody('admincarrera'),
+    validateErrors
+]
 module.exports = {validarInsertarCarrera, validarEliminarCarrera, validarAsignarCarrera, validarDesasignarCarrera}

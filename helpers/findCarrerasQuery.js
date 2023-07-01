@@ -2,7 +2,9 @@ const db = require('../models/index')
 const carrera = db.sequelize.models.Carrera
 const materia = db.sequelize.models.Materia
 
-const findCarrerasAdminQuery = (adminId) => {
+const findCarrerasAdminQuery = (adminId, pagina, sizePagina) => {
+    const page = parseInt(pagina) || 0
+    const size = parseInt(sizePagina) || 10
     return {
         where: {
             adminId
@@ -17,7 +19,9 @@ const findCarrerasAdminQuery = (adminId) => {
                 as: 'materia',
                 attributes: ['id', 'nombre'],
             }]
-        }]
+        }],
+        limit:size,
+        offset:page
     }
 }
 

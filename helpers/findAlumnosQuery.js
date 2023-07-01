@@ -1,7 +1,9 @@
 const db = require('../models/index')
 const user = db.sequelize.models.User
 
-const findAlumnosQuery = (profesorId) => {
+const findAlumnosQuery = (profesorId, pagina, sizePagina) => {
+    const page = parseInt(pagina) || 0
+    const size = parseInt(sizePagina) || 10
     return {
             where: {
                 profesorId: profesorId
@@ -14,7 +16,9 @@ const findAlumnosQuery = (profesorId) => {
                     as:'nota',
                     attributes: ['primerParcial', 'segundoParcial']
                 }
-            }]
+            }],
+            limit:size,
+            offset:page
     }
 }
 

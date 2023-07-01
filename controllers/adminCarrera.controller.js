@@ -1,6 +1,7 @@
 const { findMateriasAdminQuery, findMateriaAdminQuery } = require('../helpers/findMateriaQuery')
 const db = require('../models/index')
 const materia = db.sequelize.models.Materia
+const carrera = db.sequelize.models.Carrera
 
 const findMateriasAdmin = async (req, res) => {
     try {
@@ -59,12 +60,17 @@ const desasignarMateria = async (req, res) => {
 
 const insertarMateria = async (req, res) => {
     try {
-        const {nombre, profesorId, carreraId} = req.body
+        const carreraAux = await carrera.findOne({
+            where:{
+                adminId: req.uid
+            }
+        })
+        const {nombre, profesorId} = req.body
 
         materia.create({
             nombre,
             profesorId,
-            carreraId,
+            carreraId: carreraAux.id,
         })
 
         res.json({ok:true})

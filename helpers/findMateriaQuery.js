@@ -3,7 +3,9 @@ const materia = db.sequelize.models.Materia
 const user = db.sequelize.models.User
 const carrera = db.sequelize.models.Carrera
 
-const findMateriasQuery = (alumnoId) => {
+const findMateriasQuery = (alumnoId, pagina, sizePagina) => {
+    const page = parseInt(pagina) || 0
+    const size = parseInt(sizePagina) || 10
     return {
         where: {
             id: alumnoId
@@ -17,6 +19,8 @@ const findMateriasQuery = (alumnoId) => {
                 attributes: ['primerParcial', 'segundoParcial'],
             },
         }],
+        limit:size,
+        offset:page
     }
 }
 
