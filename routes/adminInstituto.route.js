@@ -133,7 +133,7 @@ router.get('/carrera/:id', validarEliminarCarrera, findCarreraAdmin)
 
 /**
  *  @swagger 
- *  /api/v1/admininstituto/asignarcarrera/{carreraId}/{adminId}:
+ *  /api/v1/admininstituto/asignaradmin/{carreraId}/{adminId}:
  *      put:
  *          summary: Asigna un admin a una carrera 
  *          parameters:
@@ -156,11 +156,11 @@ router.get('/carrera/:id', validarEliminarCarrera, findCarreraAdmin)
  *              400: 
  *                  description: Bad request
  */
-router.put('/asignarcarrera/:carreraId/:adminId', validarAsignarCarrera, asignarAdministrador)
+router.put('/asignaradmin/:carreraId/:adminId', validarAsignarCarrera, asignarAdministrador)
 
 /**
  *  @swagger 
- *  /api/v1/admin/desasignarcarrera/:id:
+ *  /api/v1/admin/desasignaradmin/:id:
  *      put:
  *          summary: Desasigna un admin de una carrera
  *          parameters:
@@ -177,6 +177,6 @@ router.put('/asignarcarrera/:carreraId/:adminId', validarAsignarCarrera, asignar
  *              400: 
  *                  description: Bad request
  */
-router.put('/desasignarcarrera/:id', validarDesasignarCarrera, desasignarAdministrador)
+router.put('/desasignaradmin/:id', validarDesasignarCarrera, desasignarAdministrador)
 
 module.exports = router
