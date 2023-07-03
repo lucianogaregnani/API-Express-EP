@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const { findInstitutosAdminQuery } = require('../helpers/findInstitutoQuery')
+const { findInstitutosAdminQuery, findInstitutoAdminQuery } = require('../helpers/findInstitutoQuery')
 const db = require('../models/index')
 const { updateAdminQuery } = require('../helpers/adminQuery')
 const instituto = db.sequelize.models.Instituto 
@@ -44,7 +44,7 @@ const findInstitutos = async (req, res) => {
 
 const findInstituto = async (req, res) => {
     try {
-        const institutos = await instituto.findByPk(req.params.id, findInstitutosAdminQuery(req.uid))
+        const institutos = await instituto.findByPk(req.params.id, findInstitutoAdminQuery())
     
         res.json(institutos)
     } catch (error) {

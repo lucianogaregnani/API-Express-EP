@@ -10,6 +10,15 @@ const router = express.Router()
  *      get:
  *          summary: Devuelve una lista con todas las carreras
  *          tags: [Administrador de instituto]
+ *          parameters:
+ *              - in: query
+ *                name: size
+ *                schema:
+ *                  type: integer
+ *              - in: query
+ *                name: page
+ *                schema: 
+ *                  type: integer
  *          responses:
  *              200:
  *                  description: Ok

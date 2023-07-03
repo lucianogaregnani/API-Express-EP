@@ -10,6 +10,15 @@ const { validarFindMateria, validarAsignarMateria, validarInsertarMateria, valid
  *      get:
  *          summary: Devuelve una lista con todas las materias
  *          tags: [Administrador de carrera]
+ *          parameters:
+ *              - in: query
+ *                name: size
+ *                schema:
+ *                  type: integer
+ *              - in: query
+ *                name: page
+ *                schema: 
+ *                  type: integer
  *          responses:
  *              200:
  *                  description: Ok

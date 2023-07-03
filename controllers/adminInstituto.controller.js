@@ -26,13 +26,17 @@ const findCarreraAdmin = async (req, res) => {
 
 const insertarCarrera = async (req, res) => {
     try {
+        //TODO: Pasarlo a un middlewar de validacion
         const institutoAux = await instituto.findOne({
             where:{
-                adminId: req.uid
+                [Op.and]: {
+                    adminId: req.uid,
+                    id: req.body.institutoId
+                }
             }
         })
 
-        if(!institutoAux) throw new Error('No tenes ningun instituto asignado')
+        if(!institutoAux) throw new Error('No tenes ese instituto asignado')
         
         const {nombre, adminId} = req.body
         await carrera.create({

@@ -16,4 +16,15 @@ const findInstitutosAdminQuery = (pagina, sizePagina) => {
     }
 }
 
-module.exports = {findInstitutosAdminQuery}
+const findInstitutoAdminQuery = () => {
+    return {
+        attributes:['id', 'nombre'],
+        include: [{
+            model: carrera,
+            as: 'carrera',
+            attributes: ['id', 'nombre']
+        }],
+    }
+}
+
+module.exports = {findInstitutosAdminQuery, findInstitutoAdminQuery }

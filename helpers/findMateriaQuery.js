@@ -1,11 +1,9 @@
 const db = require('../models/index')
 const materia = db.sequelize.models.Materia
-const user = db.sequelize.models.User
 const carrera = db.sequelize.models.Carrera
+const user = db.sequelize.models.User
 
-const findMateriasQuery = (alumnoId, pagina, sizePagina) => {
-    const page = parseInt(pagina) || 0
-    const size = parseInt(sizePagina) || 10
+const findMateriasQuery = (alumnoId) => {
     return {
         where: {
             id: alumnoId
@@ -13,14 +11,13 @@ const findMateriasQuery = (alumnoId, pagina, sizePagina) => {
         attributes: [],
         include: [{
             model: materia,
+            as:'alumnos',
             attributes: ['id', 'nombre'],
             through: {
                 as:'nota',
                 attributes: ['primerParcial', 'segundoParcial'],
             },
-        }],
-        limit:size,
-        offset:page
+        }]
     }
 }
 
@@ -34,41 +31,35 @@ const findMateriaQuery = (alumnoId, materiaId) => {
     return queryAux
 }
 
-const findMateriasAdminQuery = (pagina, sizePagina) => {
+const findMateriasAdminQuery = (adminId, pagina, sizePagina) => {
     const page = parseInt(pagina) || 0
     const size = parseInt(sizePagina) || 10
     return {
-        attributes:['id', 'nombre'],
+        attributes: ['id', 'nombre', 'profesorId'],
         include: [{
-                model: user,
-                as: 'profesor',
-                attributes: ['id', 'nombre']
-            },
-            {
                 model: carrera,
                 as: 'carrera',
-                attributes: ['id', 'nombre']
-            }
-        ],
+                attributes: ['nombre'],
+                where: {
+                    adminId
+                }
+        }],
         limit: size,
         offset: page
     }
 }
 
-const findMateriaAdminQuery = () => {
+const findMateriaAdminQuery = (adminId) => {
     return {
-        attributes:['id', 'nombre'],
+        attributes: ['id', 'nombre', 'profesorId'],
         include: [{
-                model: user,
-                as: 'profesor',
-                attributes: ['id', 'nombre']
-            },
-            {
                 model: carrera,
                 as: 'carrera',
-                attributes: ['id', 'nombre']
-            }
-        ]
+                attributes: [],
+                where: {
+                    adminId
+                }
+        }],
     }
 }
 

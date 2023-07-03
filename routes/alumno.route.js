@@ -11,6 +11,15 @@ const router = express.Router()
  *      get:
  *          summary: Devuelve una lista con todas las materias del alumno
  *          tags: [Alumno]
+ *          parameters:
+ *              - in: query
+ *                name: size
+ *                schema:
+ *                  type: integer
+ *              - in: query
+ *                name: page
+ *                schema: 
+ *                  type: integer
  *          responses:
  *              200:
  *                  description: Ok

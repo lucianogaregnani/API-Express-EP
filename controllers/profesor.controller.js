@@ -7,11 +7,11 @@ const nota = db.sequelize.models.Nota
 const findAlumnos = async (req, res) => {
     try {
         const {page, size} = req.query
-        const alumnos = await materia.findOne(findAlumnosQuery(req.uid, page, size))
+        const alumnos = await materia.findAll(findAlumnosQuery(req.uid, page, size))
 
         if(!alumnos) throw new Error('No tenes ningun alumno')
 
-        res.json(alumnos.Users)
+        res.json(alumnos)
     } catch (error) {
         res.status(400).json({error: error.message})
     }

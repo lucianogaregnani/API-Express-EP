@@ -5,12 +5,13 @@ const findAlumnosQuery = (profesorId, pagina, sizePagina) => {
     const page = parseInt(pagina) || 0
     const size = parseInt(sizePagina) || 10
     return {
+            attributes: ['nombre'],
             where: {
-                profesorId: profesorId
+                profesorId
             },
-            attributes: [],
             include: [{
                 model: user,
+                as:'alumnos',
                 attributes: ['id', 'email', 'nombre'],
                 through: {
                     as:'nota',

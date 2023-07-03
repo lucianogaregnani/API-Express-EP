@@ -2,33 +2,17 @@ const {param, body} = require('express-validator')
 const validateErrors = require('../middlewares/validateErrors')
 const { validateAccess } = require('./validateUser')
 const db = require('../models/index')
-const { Op } = require('sequelize')
 const { buscarUsuario, validarNombre } = require('./validateAdmin')
+const { findMateriaAdminQuery } = require('../helpers/findMateriaQuery')
 const materia = db.sequelize.models.Materia 
-const carrera = db.sequelize.models.Carrera 
 
-const buscarMateria = async (id, profesorId) => {
-    const materiaAux = await materia.findOne({
-        where: {
-            [Op.and]: {
-                id,
-                profesorId
-            }
-        }
-    })
+const buscarMateria = async (id, adminId) => {
+    const materiaAux = await materia.findByPk(id, findMateriaAdminQuery(adminId))
 
     return materiaAux
 }
 
-const buscarCarrera = async (id) => {
-    const carreraAux = await carrera.findOne({
-        where: {
-            id
-        }
-    })
 
-    return carreraAux
-}
 
 const validarExistenciaDeMateria = (atributo) => param(atributo)
                                     .notEmpty()
@@ -37,16 +21,10 @@ const validarExistenciaDeMateria = (atributo) => param(atributo)
                                         if(!materiaAux) throw new Error('No existe ningún materia con esa ID')
                                     })
 
-const validarExistenciaDeCarrera = (atributo) => body(atributo)
-                                    .notEmpty()
-                                    .custom(async value => {
-                                        const carreraAux = await buscarCarrera(value)
-                                        if(!carreraAux) throw new Error('No existe una carrera con esa ID')
-                                    })
 
 const validarFindMateria = [
     ...validateAccess('adminCarrera'),
-    validarExistenciaDeMateria('materiaId'),
+    validarExistenciaDeMateria('id'),
     validateErrors
 ]
 

@@ -6,9 +6,9 @@ const nota = db.sequelize.models.Nota
 
 const findMaterias = async (req,res) => {
     try {
-        const {page, size} = req.query
-        const materias = await user.findOne(findMateriasQuery(req.uid, page, size))
-        res.status(200).json(materias.Materia)
+        const materias = await user.findOne(findMateriasQuery(req.uid))
+        console.log(materias)
+        res.status(200).json(materias.alumnos)
     } catch (error) {
         res.status(400).json({error: error.message})
     }
@@ -17,7 +17,7 @@ const findMaterias = async (req,res) => {
 const findMateria = async (req, res) => {
     try {
         const materia = await user.findOne(findMateriaQuery(req.uid, req.params.id))
-        res.status(200).json(materia.Materia[0])
+        res.status(200).json(materia.alumnos[0])
     } catch (error) {
         res.status(400).json({error: error.message})
     }
@@ -25,7 +25,7 @@ const findMateria = async (req, res) => {
 
 const inscribirseAMateria = async (req, res) => {
     try {
-        const notaAVer = await nota.create({
+        await nota.create({
             materiaId: req.params.id,
             alumnoId: req.uid
         })
@@ -38,16 +38,16 @@ const inscribirseAMateria = async (req, res) => {
 
 const darseDeBaja = async (req, res) => {
     try {
-        const materiaDeBaja = nota.destroy({
+        await nota.destroy({
             where: {
                 [Op.and]: {
-                    materiaId: req.params.materiaId,
-                    alumnoId: req.params.alumnoId
+                    materiaId: req.params.id,
+                    alumnoId: req.uid
                 }
             }
         })
 
-        res.status(200).json({materiaDeBaja})
+        res.status(200).json({ok:true})
     } catch (error) {
         res.status(400).json({error: error.message})
     }

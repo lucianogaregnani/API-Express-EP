@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { findMateriasAdminQuery, findMateriaAdminQuery } = require('../helpers/findMateriaQuery')
 const db = require('../models/index')
 const materia = db.sequelize.models.Materia
@@ -6,7 +7,7 @@ const carrera = db.sequelize.models.Carrera
 const findMateriasAdmin = async (req, res) => {
     try {
         const {page, size} = req.query
-        const materias = await materia.findAll(findMateriasAdminQuery(page, size))
+        const materias = await materia.findAll(findMateriasAdminQuery(req.uid, page, size))
         res.json(materias)
     } catch (error) {
         res.status(400).json({error:error.message})
@@ -15,10 +16,10 @@ const findMateriasAdmin = async (req, res) => {
 
 const findMateriaAdmin = async (req, res) => {
     try {
-        const materiaAux = await materia.findByPk(req.params.id, findMateriaAdminQuery())
+        const materiaAux = await materia.findByPk(req.params.id, findMateriaAdminQuery(req.uid))
         res.json(materiaAux)
     } catch (error) {
-        res.status(400).json({error:error.message})
+        res.status(400).json({error:error.msessage})
     }
 }
 
@@ -60,11 +61,18 @@ const desasignarMateria = async (req, res) => {
 
 const insertarMateria = async (req, res) => {
     try {
+         //TODO: Pasarlo a un middlewar de validacion
         const carreraAux = await carrera.findOne({
             where:{
-                adminId: req.uid
+                [Op.and]: {
+                    adminId: req.uid,
+                    id: req.body.carreraId
+                }
             }
         })
+
+        if(!carreraAux) throw new Error('No tenes esa carrera asignada')
+
         const {nombre, profesorId} = req.body
 
         materia.create({

@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       this.belongsToMany(models.Materia, {
+        as:'alumnos',
         through: models.Nota,
         foreignKey: 'alumnoId'
       })

@@ -10,6 +10,15 @@ const router = express.Router()
  *      get:
  *          summary: Devuelve una lista con todos los institutos
  *          tags: [Profesor]
+ *          parameters:
+ *              - in: query
+ *                name: size
+ *                schema:
+ *                  type: integer
+ *              - in: query
+ *                name: page
+ *                schema: 
+ *                  type: integer
  *          responses:
  *              200:
  *                  description: Ok
