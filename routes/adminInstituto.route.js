@@ -35,7 +35,7 @@ const router = express.Router()
  *                                      nombre: 
  *                                          type: string
  *                                          description: El nombre de la carrera
- *                                      materia: 
+ *                                      carrera: 
  *                                          type: array
  *                                          items:
  *                                              type: object
@@ -43,7 +43,7 @@ const router = express.Router()
  *                                                  id: 
  *                                                      type: integer
  *                                                      description: La id de la materia
- *                                                  segundoParcial:
+ *                                                  nombre:
  *                                                      type: string
  *                                                      description: El nombre de la materia
  *                                  
@@ -68,6 +68,15 @@ router.get('/carreras', validateAccess('adminInstituto'), findCarreras)
  *                              nombre: 
  *                                  type: string
  *                                  description: El nombre de la carrera
+ *                                  required: true
+ *                              institutoId:
+ *                                  type: integer
+ *                                  description: El id del instituto de la carrera   
+ *                                  required: true                   
+ *                              adminId:
+ *                                  type: integer
+ *                                  description: El id del admin de la carrera
+ *                                  required: true
  *          responses:
  *              200:
  *                  description: Ok
@@ -178,7 +187,7 @@ router.put('/asignaradmin/:carreraId/:adminId', validarAsignarCarrera, asignarAd
  *               schema:
  *                  type: string
  *               required: true 
- *               description: El id del admin a desasignar
+ *               description: El id de la carrera a desasignar el admin
  *          tags: [Administrador de instituto]
  *          responses:
  *              200:

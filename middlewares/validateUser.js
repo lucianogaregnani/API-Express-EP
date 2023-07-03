@@ -17,7 +17,6 @@ const validateAccess = (rol) => [
     requireRol(rol)
 ] 
 
-// Validar roles
 const validateRegister = [
     validateEmail(),
     validatePassword(),

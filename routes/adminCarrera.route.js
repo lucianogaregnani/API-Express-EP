@@ -35,17 +35,14 @@ const { validarFindMateria, validarAsignarMateria, validarInsertarMateria, valid
  *                                      nombre: 
  *                                          type: string
  *                                          description: El nombre de la materia
- *                                      materia: 
- *                                          type: array
- *                                          items:
- *                                              type: object
- *                                              properties:
- *                                                  id: 
- *                                                      type: integer
- *                                                      description: La id del profesor
- *                                                  nombre:
- *                                                      type: string
- *                                                      description: El nombre del profesor
+ *                                      profesorId:
+ *                                          type: integer
+ *                                          description: El id del profesor de la materia
+ *                                      carrera: 
+ *                                          type: object
+ *                                          properties:
+ *                                              nombre: string
+ *                                              description: El nombre de la carrera al cual pertenece la materia
  *                                  
  *              400: 
  *                   description: Bad request
@@ -79,17 +76,9 @@ router.get('/materias', validateAccess('adminCarrera'), findMateriasAdmin)
  *                                      nombre: 
  *                                          type: string
  *                                          description: El nombre de la materia
- *                                      materia: 
- *                                          type: array
- *                                          items:
- *                                              type: object
- *                                              properties:
- *                                                  id: 
- *                                                      type: integer
- *                                                      description: La id del profesor
- *                                                  nombre:
- *                                                      type: string
- *                                                      description: La id del profesor
+ *                                      profesorId: 
+ *                                          type: string
+ *                                          description: El id del profesor de la materia
  *              400: 
  *                   description: Bad request
  */
@@ -97,7 +86,7 @@ router.get('/materia/:id', validarFindMateria, findMateriaAdmin)
 
 /**
  *  @swagger 
- *  /api/v1/admincarrera/asignarmateria/{materiaId}/{profesorId}:
+ *  /api/v1/admincarrera/asignarprofesor/{materiaId}/{profesorId}:
  *      put:
  *          summary: Asigna un profesor a una materia 
  *          parameters:
@@ -120,11 +109,11 @@ router.get('/materia/:id', validarFindMateria, findMateriaAdmin)
  *              400: 
  *                  description: Bad request
  */
-router.put('/asignarmateria/:materiaId/:profesorId', validarAsignarMateria, asignarMateria)
+router.put('/asignarprofesor/:materiaId/:profesorId', validarAsignarMateria, asignarMateria)
 
 /**
  *  @swagger 
- *  /api/v1/admincarrera/desasignarmateria/:id:
+ *  /api/v1/admincarrera/desasignarprofesor/:id:
  *      put:
  *          summary: Desasigna un profesor de una materia
  *          parameters:
@@ -133,7 +122,7 @@ router.put('/asignarmateria/:materiaId/:profesorId', validarAsignarMateria, asig
  *               schema:
  *                  type: string
  *               required: true 
- *               description: El id del profesor a desasignar
+ *               description: El id de la materia a desasignar el profesor
  *          tags: [Administrador de carrera]
  *          responses:
  *              200:
@@ -141,7 +130,7 @@ router.put('/asignarmateria/:materiaId/:profesorId', validarAsignarMateria, asig
  *              400: 
  *                  description: Bad request
  */
-router.put('/desasignarmateria/:id', validarFindMateria, desasignarMateria)
+router.put('/desasignarprofesor/:id', validarFindMateria, desasignarMateria)
 
 /**
  *  @swagger 
@@ -159,6 +148,15 @@ router.put('/desasignarmateria/:id', validarFindMateria, desasignarMateria)
  *                              nombre: 
  *                                  type: string
  *                                  description: El nombre de la materia
+ *                                  required: true
+ *                              profesorId:
+ *                                  type: integer
+ *                                  description: El id del profesor de la materia
+ *                                  required: true
+ *                              carreraId:
+ *                                  type: integer
+ *                                  description: El id de la carrera a la que va a pertenecer la materia
+ *                                  required: true
  *          responses:
  *              200:
  *                  description: Ok

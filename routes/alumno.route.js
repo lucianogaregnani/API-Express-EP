@@ -30,21 +30,16 @@ const router = express.Router()
  *                              items:
  *                                  type: object
  *                                  properties: 
- *                                      id: 
+ *                                      primerParcial: 
+ *                                          type: integer
+ *                                          description: La nota del primer parcial
+ *                                      segundoParcial:
+ *                                          type: integer
+ *                                          description: La nota del segundo parcial
+ *                                      materiaId: 
  *                                          type: integer
  *                                          description: La id de la materia
- *                                      nombre: 
- *                                          type: string
- *                                          description: El nombre de la materia
- *                                      nota: 
- *                                          type: object
- *                                          properties:
- *                                                  primerParcial: 
- *                                                      type: integer
- *                                                      description: La nota del primer parcial
- *                                                  segundoParcial:
- *                                                      type: integer
- *                                                      description: La nota del segundo parcial
+ * 
  *                                  
  *              400: 
  *                   description: Bad request
@@ -72,9 +67,6 @@ router.get('/materias', validateAccess('alumno'), findMaterias)
  *                          schema:
  *                                  type: object
  *                                  properties: 
- *                                      id: 
- *                                          type: integer
- *                                          description: La id de la materia
  *                                      nombre: 
  *                                          type: string
  *                                          description: El nombre de la materia

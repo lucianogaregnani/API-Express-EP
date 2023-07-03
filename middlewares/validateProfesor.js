@@ -1,6 +1,6 @@
 const validateErrors = require('../middlewares/validateErrors')
 const { validateAccess } = require('./validateUser')
-const { param } = require('express-validator')
+const { param, body } = require('express-validator')
 const db = require('../models/index')
 const { Op } = require('sequelize')
 const nota = db.sequelize.models.Nota 
@@ -39,10 +39,44 @@ const validarExistenciaDeAlumno =() => param('id')
                                     if(!notaAux) throw new Error('No existe ese alumno en tu materia')
                                 })
 
-const validateFindAlumno = [
+const validateNota = (atributo) => body(atributo)
+                                .custom(async value => {
+                                    console.log(!(parseInt(value) >= 1 && parseInt(value) <= 10))
+                                    if(value && !(parseInt(value) >= 1 && parseInt(value) <= 10)) throw new Error('Debe ser un valor entre 1 y 10')
+                                })
+
+const validarAsignacionEnMateria = (atributo) => param(atributo).custom(async (value, {req}) => {
+                                            const materiaAux = await materia.findOne({
+                                                where: {
+                                                    [Op.and]:{
+                                                        id: value,
+                                                        profesorId: req.uid
+                                                    }
+                                                }
+                                            })
+                                            
+                                            if(!materiaAux) throw new Error('No estas asignado a esa materia')
+                                        })
+
+const validarFindMaterias = [
     validateAccess('Profesor'),
-    validarExistenciaDeAlumno(),
+    validarAsignacionEnMateria('id'),
     validateErrors
 ]
 
-module.exports = {validateFindAlumno}
+const validarActualizacionDeNotas = [
+    validateAccess('Profesor'),
+    validarExistenciaDeAlumno(),
+    validarAsignacionEnMateria('materiaId'),
+    validateNota('primerParcial'),
+    validateNota('segundoParcial'),
+    validateErrors
+]
+
+const validateFindAlumno = [
+    validateAccess('Profesor'),
+    validarExistenciaDeAlumno('materiaId'),
+    validateErrors
+]
+
+module.exports = {validateFindAlumno, validarActualizacionDeNotas, validarFindMaterias}

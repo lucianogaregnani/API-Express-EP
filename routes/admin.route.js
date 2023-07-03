@@ -111,6 +111,11 @@ router.get('/instituto/:id', validarFindInstituto, findInstituto)
  *                              nombre: 
  *                                  type: string
  *                                  description: El nombre del instituto
+ *                                  required: true
+ *                              adminId: 
+ *                                  type: integer
+ *                                  description: El id de que va a ser admin del instituto
+ *                                  required: true
  *          responses:
  *              200:
  *                  description: Ok
